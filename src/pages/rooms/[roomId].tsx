@@ -6,9 +6,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import type { GetServerSidePropsContext, NextPage } from "next";
-import { AiOutlineLink } from "react-icons/ai";
 import { FaBars } from "react-icons/fa";
-import { GiMagickTrick } from "react-icons/gi";
 import { BsPeople } from "react-icons/bs";
 import styled from "styled-components";
 
