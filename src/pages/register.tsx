@@ -15,14 +15,11 @@ const Container = styled.div`
   justify-content: center;
 `;
 
-const Content = styled.div`
-  margin: 20px 0;
-  width: 100%;
+const Form = styled.form`
+  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  height: 100%;
+  justify-content: center;
 `;
 
 const Input = styled.input`
@@ -66,7 +63,6 @@ const Row = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 90%;
   flex-wrap: wrap;
   margin: 10px 0;
 `;
@@ -103,22 +99,20 @@ const Register: NextPage = () => {
   return (
     <Container>
       <Card>
-        <form onSubmit={submit}>
-          <Content>
-            <Row>
-              <Title>顯示名稱</Title>
-              <Input
-                name="username"
-                type="text"
-                value={username}
-                onChange={({ target }) => setUsername(target.value)}
-              />
-            </Row>
-            <Row>
-              <SubmitBtn type="submit">提交</SubmitBtn>
-            </Row>
-          </Content>
-        </form>
+        <Form onSubmit={submit}>
+          <Row>
+            <Title>顯示名稱</Title>
+            <Input
+              name="username"
+              type="text"
+              value={username}
+              onChange={({ target }) => setUsername(target.value)}
+            />
+          </Row>
+          <Row>
+            <SubmitBtn type="submit">提交</SubmitBtn>
+          </Row>
+        </Form>
       </Card>
     </Container>
   );
