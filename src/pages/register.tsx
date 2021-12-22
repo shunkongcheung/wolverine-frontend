@@ -4,7 +4,7 @@ import { doc, getFirestore, setDoc } from "firebase/firestore";
 import { FormEvent, useCallback, useState } from "react";
 import styled from "styled-components";
 
-import { Card } from "../components";
+import { Button, Card } from "../components";
 import { getFirebaseApp } from "../utils";
 
 const Container = styled.div`
@@ -15,7 +15,7 @@ const Container = styled.div`
   justify-content: center;
 `;
 
-const Form = styled.form`
+const Form = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -34,7 +34,7 @@ const Input = styled.input`
   }
 `;
 
-const SubmitBtn = styled.button`
+const SubmitBtnContainer = styled.div`
   margin-left: auto;
 
   width: 100%;
@@ -71,35 +71,29 @@ const Register: NextPage = () => {
   const [username, setUsername] = useState("");
   const router = useRouter();
 
-  const submit = useCallback(
-    async (evt: FormEvent<HTMLFormElement>) => {
-      // prevent redirect
-      evt.preventDefault();
+  const submit = useCallback(async () => {
+    // check if username is empty
+    if (!username) return;
 
-      // check if username is empty
-      if (!username) return;
+    // getting firebase
+    getFirebaseApp();
+    const db = getFirestore();
 
-      // getting firebase
-      getFirebaseApp();
-      const db = getFirestore();
+    // submit value to firebase
+    const timestamp = new Date();
+    await setDoc(doc(db, "users", username), { username, timestamp });
 
-      // submit value to firebase
-      const timestamp = new Date();
-      await setDoc(doc(db, "users", username), { username, timestamp });
+    // store username to local storage
+    localStorage.setItem("username", username);
 
-      // store username to local storage
-      localStorage.setItem("username", username);
-
-      // redirect to home page
-      router.push("/");
-    },
-    [username, router]
-  );
+    // redirect to home page
+    router.push("/");
+  }, [username, router]);
 
   return (
     <Container>
       <Card>
-        <Form onSubmit={submit}>
+        <Form>
           <Row>
             <Title>顯示名稱</Title>
             <Input
@@ -110,7 +104,9 @@ const Register: NextPage = () => {
             />
           </Row>
           <Row>
-            <SubmitBtn type="submit">提交</SubmitBtn>
+            <SubmitBtnContainer>
+              <Button handleClick={submit}>提交</Button>
+            </SubmitBtnContainer>
           </Row>
         </Form>
       </Card>
