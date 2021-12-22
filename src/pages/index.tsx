@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import styled from "styled-components";
 import { Card } from "../components";
+import { useAuthed } from "../hooks";
 
 const Container = styled.div`
   display: flex;
@@ -24,6 +25,8 @@ const Row = styled.div`
 `;
 
 const Home: NextPage = () => {
+  useAuthed();
+
   return (
     <Container>
       <Card>
