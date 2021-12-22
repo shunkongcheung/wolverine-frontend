@@ -84,6 +84,7 @@ const Control: React.FC<ControlProps> = ({
     const round = {
       roomId,
       timestamp,
+      stage: "lobby",
       winners: "",
       wolfs: getResult(duplicated, wolf),
       wolfKings: getResult(duplicated, wolfKing),
