@@ -5,6 +5,8 @@ import { useRouter } from "next/router";
 import { useMemo } from "react";
 import styled from "styled-components";
 import * as yup from "yup";
+
+import { Header } from "../../components";
 import { useAuthed } from "../../hooks";
 import { getFirebaseApp } from "../../utils";
 
@@ -20,14 +22,6 @@ const Content = styled.div`
   width: 100%;
   max-width: 780px;
   margin: auto;
-`;
-
-const Header = styled.h1`
-  color: ${({ theme }) => theme.colors.primary[700]};
-  text-align: center;
-  margin: 0;
-  padding: 15px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.primary[400]};
 `;
 
 const Row = styled.div`
