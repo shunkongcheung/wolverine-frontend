@@ -1,8 +1,10 @@
-import { doc, getFirestore, setDoc } from "firebase/firestore";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import { doc, getFirestore, setDoc } from "firebase/firestore";
 import { FormEvent, useCallback, useState } from "react";
 import styled from "styled-components";
+
+import { Card } from "../components";
 import { getFirebaseApp } from "../utils";
 
 const Container = styled.div`
@@ -13,45 +15,16 @@ const Container = styled.div`
   justify-content: center;
 `;
 
-const Card = styled.div`
-  border-radius: 5px;
-  width: 500px;
-  height: 700px;
-  max-width: 70%;
-  max-height: 60vh;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  transition: 0.3s;
-
-  display: flex;
-  flex-direction: column;
-`;
-
 const Content = styled.div`
-  padding: 20px 0;
+  margin: 20px 0;
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: space-evenly;
   align-items: center;
   height: 100%;
 `;
 
-const IconContainer = styled.div`
-  width: 100%;
-  background: #1b304f;
-  display: flex;
-  justify-content: center;
-
-  padding: 50px 0;
-`;
-
-const Icon = styled.div`
-  background: url(/main-icon.jpg);
-  background-size: contain;
-  background-repeat: no-repeat;
-  width: 200px;
-  height: 150px;
-`;
 const Input = styled.input`
   border: 1px solid ${({ theme }) => theme.colors.primary[700]};
   border-radius: 2px;
@@ -130,13 +103,10 @@ const Register: NextPage = () => {
   return (
     <Container>
       <Card>
-        <IconContainer>
-          <Icon />
-        </IconContainer>
         <form onSubmit={submit}>
           <Content>
             <Row>
-              <Title>display name</Title>
+              <Title>顯示名稱</Title>
               <Input
                 name="username"
                 type="text"
@@ -145,7 +115,7 @@ const Register: NextPage = () => {
               />
             </Row>
             <Row>
-              <SubmitBtn type="submit">SUBMIT</SubmitBtn>
+              <SubmitBtn type="submit">提交</SubmitBtn>
             </Row>
           </Content>
         </form>
