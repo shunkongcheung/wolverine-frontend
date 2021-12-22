@@ -30,12 +30,12 @@ const Home: NextPage = () => {
         <Content>
           <Row>
             <Link href="/rooms/create">
-              <a>創建房間 >></a>
+              <a>創建房間 &gt;&gt;</a>
             </Link>
           </Row>
           <Row>
             <Link href="/rooms/join">
-              <a>加入房間 >></a>
+              <a>加入房間 &gt;&gt;</a>
             </Link>
           </Row>
         </Content>
