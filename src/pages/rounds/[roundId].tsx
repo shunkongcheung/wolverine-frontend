@@ -9,6 +9,7 @@ import styled from "styled-components";
 
 import { TabContainer } from "../../components";
 import { Character } from "../../containers/round";
+import { useRound } from "../../hooks";
 import { getFirebaseApp } from "../../utils";
 
 type Stage =
@@ -34,6 +35,8 @@ interface RoundProps {
   witches: Array<string>;
   wolfKings: Array<string>;
   wolfs: Array<string>;
+
+  alives: Array<string>;
 }
 
 const Container = styled.div`
@@ -42,7 +45,13 @@ const Container = styled.div`
 `;
 
 const Round: NextPage<RoundProps> = (props) => {
-  const [tab, setTab] = useState("control");
+  const { roundId, ...initialValues } = props;
+
+  const [tab, setTab] = useState("home");
+  const round = useRound(roundId, initialValues);
+
+  console.log(round);
+
   return (
     <Container>
       <TabContainer
@@ -55,6 +64,7 @@ const Round: NextPage<RoundProps> = (props) => {
           {
             id: "power",
             icon: <GiCrossedSwords size={30} />,
+            disabled: round.stage === "lobby",
           },
           {
             id: "character",
@@ -63,6 +73,7 @@ const Round: NextPage<RoundProps> = (props) => {
           {
             id: "vote",
             icon: <FaVoteYea size={30} />,
+            disabled: round.stage !== "vote",
           },
         ]}
       >
