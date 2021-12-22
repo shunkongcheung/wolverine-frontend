@@ -18,6 +18,22 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
+const ContentContainer = styled.div`
+  margin: 20px 0;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Content = styled.div`
+  width: 90%;
+  height: 100%;
+`;
+
 const IconContainer = styled.div`
   width: 100%;
   background: #1b304f;
@@ -41,7 +57,9 @@ const Card: React.FC<CardProps> = ({ children }) => {
       <IconContainer>
         <Icon />
       </IconContainer>
-      {children}
+      <ContentContainer>
+        <Content>{children}</Content>
+      </ContentContainer>
     </Container>
   );
 };
