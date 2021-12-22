@@ -1,3 +1,4 @@
 import useAuthed from "./useAuthed";
+import useRoom from "./useRoom";
 
-export { useAuthed };
+export { useAuthed, useRoom };
