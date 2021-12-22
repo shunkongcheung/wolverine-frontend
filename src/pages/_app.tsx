@@ -1,29 +1,28 @@
 import type { AppProps } from "next/app";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 
-function MyApp({ Component, pageProps }: AppProps) {
-  const theme = {
-    breakpoints: {
-      sm: 600,
+const theme = {
+  breakpoints: {
+    sm: 600,
+  },
+  colors: {
+    background: "white",
+    primary: {
+      50: "#f0f9ff",
+      100: "#e0f2fe",
+      200: "#bae6fd",
+      300: "#7dd3fc",
+      400: "#38bdf8",
+      500: "#0ea5e9",
+      600: "#0284c7",
+      700: "#0369a1",
+      800: "#075985",
+      900: "#0c4a6e",
     },
-    colors: {
-      background: "white",
-      primary: {
-        50: "#f0f9ff",
-        100: "#e0f2fe",
-        200: "#bae6fd",
-        300: "#7dd3fc",
-        400: "#38bdf8",
-        500: "#0ea5e9",
-        600: "#0284c7",
-        700: "#0369a1",
-        800: "#075985",
-        900: "#0c4a6e",
-      },
-    },
-  };
+  },
+};
 
-  const GlobalStyle = createGlobalStyle`
+const GlobalStyle = createGlobalStyle`
     html,
     body {
       padding: 0;
@@ -64,6 +63,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     }
 `;
 
+function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <GlobalStyle />
