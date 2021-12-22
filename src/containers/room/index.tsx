@@ -1,3 +1,4 @@
 import Control from "./Control";
+import PeopleList from "./PeopleList";
 
-export { Control };
+export { Control, PeopleList };

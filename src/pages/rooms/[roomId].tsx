@@ -1,4 +1,10 @@
-import { doc, getDoc, getFirestore } from "firebase/firestore";
+import {
+  arrayUnion,
+  doc,
+  getDoc,
+  getFirestore,
+  updateDoc,
+} from "firebase/firestore";
 import type { GetServerSidePropsContext, NextPage } from "next";
 import { AiOutlineLink } from "react-icons/ai";
 import { FaBars } from "react-icons/fa";
@@ -6,11 +12,11 @@ import { GiMagickTrick } from "react-icons/gi";
 import { BsPeople } from "react-icons/bs";
 import styled from "styled-components";
 
-import { Control } from "../../containers/room";
+import { Control, PeopleList } from "../../containers/room";
 import { TabContainer } from "../../components";
-import { useRoom } from "../../hooks";
+import { useAuthed, useRoom } from "../../hooks";
 import { getFirebaseApp } from "../../utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface RoomProps {
   roomId: string;
@@ -31,7 +37,7 @@ interface RoomProps {
   createdBy: string;
 }
 
-type Tab = "trick" | "joined" | "control";
+type Tab = "joined" | "control";
 
 const Container = styled.div`
   width: 100%;
@@ -42,6 +48,22 @@ const Room: NextPage<RoomProps> = (props) => {
   const { roomId, ...initialValues } = props;
   const room = useRoom(roomId, initialValues);
   const [tab, setTab] = useState<Tab>("control");
+
+  // get username
+  const username = useAuthed();
+
+  // join room
+  useEffect(() => {
+    const run = async () => {
+      getFirebaseApp();
+      const db = getFirestore();
+      await updateDoc(doc(db, "rooms", roomId), {
+        joined: arrayUnion(username),
+      });
+    };
+
+    if (!!username) run();
+  }, [username]);
 
   return (
     <Container>
@@ -58,7 +80,11 @@ const Room: NextPage<RoomProps> = (props) => {
           },
         ]}
       >
-        <Control roomId={roomId} {...room} />
+        {tab === "joined" ? (
+          <PeopleList joined={room.joined} total={room.total} />
+        ) : (
+          <Control roomId={roomId} {...room} />
+        )}
       </TabContainer>
     </Container>
   );
