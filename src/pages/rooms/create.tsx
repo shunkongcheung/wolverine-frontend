@@ -6,7 +6,7 @@ import { useMemo } from "react";
 import styled from "styled-components";
 import * as yup from "yup";
 
-import { Header } from "../../components";
+import { Button, Header } from "../../components";
 import { useAuthed } from "../../hooks";
 import { getFirebaseApp } from "../../utils";
 
@@ -176,9 +176,7 @@ const RoomCreate: NextPage = () => {
           <TotalValue>{sum}</TotalValue>
         </Content>
         <Content>
-          <button type="button" onClick={formik.handleSubmit as any}>
-            完成
-          </button>
+          <Button handleClick={formik.handleSubmit}>完成</Button>
         </Content>
       </Row>
     </Container>
