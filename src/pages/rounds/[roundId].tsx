@@ -1,7 +1,8 @@
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import type { GetServerSidePropsContext, NextPage } from "next";
 import { useState } from "react";
-import { FaBars } from "react-icons/fa";
+import { AiOutlineHome } from "react-icons/ai";
+import { FaVoteYea } from "react-icons/fa";
 import { GiCrossedSwords } from "react-icons/gi";
 import { RiCharacterRecognitionLine } from "react-icons/ri";
 import styled from "styled-components";
@@ -10,11 +11,21 @@ import { TabContainer } from "../../components";
 import { Character } from "../../containers/round";
 import { getFirebaseApp } from "../../utils";
 
+type Stage =
+  | "lobby"
+  | "wolf"
+  | "prophet"
+  | "witch"
+  | "discuss"
+  | "vote"
+  | "finish";
+
 interface RoundProps {
   roundId: string;
 
   // meta information
   roomId: string;
+  stage: Stage;
   winners: string;
 
   // roles
@@ -38,7 +49,11 @@ const Round: NextPage<RoundProps> = (props) => {
         handleClick={setTab as any}
         tabs={[
           {
-            id: "character",
+            id: "home",
+            icon: <AiOutlineHome size={30} />,
+          },
+          {
+            id: "power",
             icon: <GiCrossedSwords size={30} />,
           },
           {
@@ -46,12 +61,15 @@ const Round: NextPage<RoundProps> = (props) => {
             icon: <RiCharacterRecognitionLine size={30} />,
           },
           {
-            id: "control",
-            icon: <FaBars size={30} />,
+            id: "vote",
+            icon: <FaVoteYea size={30} />,
           },
         ]}
       >
-        <Character type="wolf" />
+        {tab === "home" && <Character type="wolf" />}
+        {tab === "power" && <Character type="wolf" />}
+        {tab === "character" && <Character type="wolf" />}
+        {tab === "vote" && <Character type="wolf" />}
       </TabContainer>
     </Container>
   );
