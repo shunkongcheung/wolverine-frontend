@@ -42,22 +42,6 @@ const GlobalStyle = createGlobalStyle`
       }
     }
 
-    button {
-      border: 1px solid ${theme.colors.primary[600]};
-      border-radius: 5px;
-      color: ${theme.colors.primary[500]};
-      background: white;
-      padding: 6px;
-      width: 100%;
-
-      transition: background 0.5s;
-
-      &:hover, &:focus {
-        color: white;
-        border-color: ${theme.colors.primary[600]};
-        background: ${theme.colors.primary[500]};
-      }
-    }
     * {
       box-sizing: border-box;
     }
