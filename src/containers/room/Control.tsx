@@ -91,6 +91,7 @@ const Control: React.FC<ControlProps> = ({
       prophets: getResult(duplicated, 1),
       farmers: getResult(duplicated, farmer),
       witches: getResult(duplicated, witch),
+      alives: joined,
     };
 
     const docRef = await addDoc(collection(db, "rounds"), round);
