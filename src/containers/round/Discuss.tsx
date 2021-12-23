@@ -83,16 +83,16 @@ const Discuss: React.FC<DiscussProps> = ({ votes, roundId }) => {
 
     const wolfTotal = wolfs.length + wolfKings.length;
 
-    let winner = "";
-    if (alives.length <= wolfTotal) winner = "wolf";
-    if (wolfTotal === 0) winner = "farmer";
+    let winners = "";
+    if (alives.length <= wolfTotal) winners = "wolf";
+    if (wolfTotal === 0) winners = "farmer";
 
     let stage = "wolf";
-    if (winner) stage = "finish";
+    if (winners) stage = "finish";
 
     await setDoc(
       doc(db, "rounds", roundId),
-      { stage, killing: "", poisoning: "", votes: [] },
+      { stage, killing: "", poisoning: "", votes: [], winners },
       { merge: true }
     );
   }, [voteOut, roundId]);
