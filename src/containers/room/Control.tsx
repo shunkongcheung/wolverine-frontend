@@ -95,7 +95,7 @@ const Control: React.FC<ControlProps> = ({
       votes: [],
       killing: "",
       isHealed: false,
-      isPoisioned: false,
+      isPoisoned: false,
     };
 
     const docRef = await addDoc(collection(db, "rounds"), round);
