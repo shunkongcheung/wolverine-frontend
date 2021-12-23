@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { Header } from "../../components";
 import Lobby from "./Lobby";
+import Witch from "./Witch";
 import WolfKill from "./WolfKill";
 
 type Stage =
@@ -20,6 +21,10 @@ type Role = "farmer" | "wolf" | "prophet" | "witch" | "wolf-king";
 
 interface HomeProps {
   alives: Array<string>;
+  isHealed: boolean;
+  isPoisoned: boolean;
+  killing: string;
+  poisoning: string;
   role: Role;
   roundId: string;
   winners: Winners;
@@ -36,6 +41,9 @@ const Container = styled.div`
 
 const Home: React.FC<HomeProps> = ({
   alives,
+  isHealed,
+  isPoisoned,
+  killing,
   role,
   roundId,
   stage,
@@ -81,7 +89,13 @@ const Home: React.FC<HomeProps> = ({
         <WolfKill alives={alives} roundId={roundId} />
       )}
       {stage === "witch" && isCurrRole && (
-        <Witch alives={alives} roundId={roundId} />
+        <Witch
+          alives={alives}
+          isHealed={isHealed}
+          isPoisoned={isPoisoned}
+          killing={killing}
+          roundId={roundId}
+        />
       )}
     </Container>
   );
