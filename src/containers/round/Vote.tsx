@@ -77,6 +77,8 @@ const Vote: React.FC<VoteProps> = ({
 
   const username = useAuthed();
 
+  const iAmAlive = !!alives.find((itm) => itm === username);
+
   const heading = useMemo(() => {
     const dead = [killing, poisoning].filter((itm) => !!itm);
     if (!dead.length) return "今晚是平安夜";
@@ -119,7 +121,7 @@ const Vote: React.FC<VoteProps> = ({
       <SubHeading>{heading}</SubHeading>
       {alives.map((name, idx) => (
         <VoteItem
-          disabled={!!selected}
+          disabled={!!selected || !iAmAlive}
           key={`VoteItem-${name}-${idx}`}
           onClick={selected ? undefined : () => handleSelect(name)}
           selected={selected === name}
@@ -128,7 +130,7 @@ const Vote: React.FC<VoteProps> = ({
         </VoteItem>
       ))}
       <VoteItem
-        disabled={!!selected}
+        disabled={!!selected || !iAmAlive}
         onClick={selected ? undefined : () => handleSelect("giveup")}
         selected={selected === "giveup"}
       >
