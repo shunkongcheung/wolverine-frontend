@@ -12,11 +12,13 @@ type Stage =
   | "vote"
   | "finish";
 
+type Winners = "wolf" | "farmer" | "";
+
 interface RoundState {
   // meta information
   roomId: string;
   stage: Stage;
-  winner: string;
+  winners: Winners;
 
   // roles
   farmers: Array<string>;
@@ -33,7 +35,7 @@ function useRound(roundId: string) {
   const [state, setState] = useState<RoundState>({
     roomId: "",
     stage: "lobby",
-    winner: "",
+    winners: "",
     farmers: [],
     prophets: [],
     witches: [],
