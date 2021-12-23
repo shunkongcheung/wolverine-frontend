@@ -33,6 +33,7 @@ interface RoundState {
   // gaming information
   votes: Array<string>;
   killing: string;
+  poisoning: string;
   isHealed: boolean;
   isPoisoned: boolean;
 }
@@ -50,6 +51,7 @@ function useRound(roundId: string) {
     alives: [],
     votes: [],
     killing: "",
+    poisoning: "",
     isHealed: false,
     isPoisoned: false,
   });
