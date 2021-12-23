@@ -2,12 +2,11 @@ import type { GetServerSidePropsContext, NextPage } from "next";
 import { useMemo, useState } from "react";
 import { AiOutlineHome } from "react-icons/ai";
 import { BsPeople } from "react-icons/bs";
-import { GiCrossedSwords } from "react-icons/gi";
 import { RiCharacterRecognitionLine } from "react-icons/ri";
 import styled from "styled-components";
 
 import { TabContainer } from "../../components";
-import { Alives, Character, Home, Vote } from "../../containers/round";
+import { Alives, Character, Home } from "../../containers/round";
 import { useAuthed, useRound } from "../../hooks";
 
 interface RoundProps {
@@ -27,7 +26,7 @@ const Round: NextPage<RoundProps> = (props) => {
 
   const username = useAuthed();
 
-  const type = useMemo(() => {
+  const role = useMemo(() => {
     const isWolf = round.wolfs.find((name) => name === username);
     if (isWolf) return "wolf";
 
@@ -53,11 +52,6 @@ const Round: NextPage<RoundProps> = (props) => {
             icon: <AiOutlineHome size={30} />,
           },
           {
-            id: "power",
-            icon: <GiCrossedSwords size={30} />,
-            disabled: round.stage === "lobby",
-          },
-          {
             id: "character",
             icon: <RiCharacterRecognitionLine size={30} />,
           },
@@ -68,10 +62,21 @@ const Round: NextPage<RoundProps> = (props) => {
         ]}
       >
         {tab === "home" && (
-          <Home roundId={roundId} stage={round.stage} winners={round.winners} />
+          <Home
+            alives={round.alives}
+            isHealed={round.isHealed}
+            isPoisoned={round.isPoisoned}
+            killing={round.killing}
+            poisoning={round.poisoning}
+            role={role}
+            roundId={roundId}
+            stage={round.stage}
+            votes={round.votes}
+            winners={round.winners}
+            wolfs={round.wolfs.concat(round.wolfKings)}
+          />
         )}
-        {tab === "power" && <Vote alives={round.alives} />}
-        {tab === "character" && <Character type={type} />}
+        {tab === "character" && <Character type={role} />}
         {tab === "alives" && <Alives alives={round.alives} />}
       </TabContainer>
     </Container>
