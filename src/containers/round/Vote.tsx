@@ -80,7 +80,8 @@ const Vote: React.FC<VoteProps> = ({
   const iAmAlive = !!alives.find((itm) => itm === username);
 
   const heading = useMemo(() => {
-    const dead = [killing, poisoning].filter((itm) => !!itm);
+    // sort name to avoid exposing who is killed who is poisoned
+    const dead = [killing, poisoning].filter((itm) => !!itm).sort();
     if (!dead.length) return "今晚是平安夜";
     if (dead.length === 1) return `今晚${dead[0]}死了`;
     return `今晚${dead.join(", ")}死了`;
