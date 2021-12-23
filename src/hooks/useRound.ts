@@ -1,4 +1,4 @@
-import { doc, getFirestore, onSnapshot } from "firebase/firestore";
+import { doc, getFirestore, onSnapshot, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 import { getFirebaseApp } from "../utils";
@@ -62,6 +62,32 @@ function useRound(roundId: string) {
     onSnapshot(doc(db, "rounds", roundId), (doc) => {
       const result = doc.data() as RoundState;
       setState(result);
+    });
+  }, [setState, roundId]);
+
+  useEffect(() => {
+    // periodically check if stage needs to be updated
+    getFirebaseApp();
+    const db = getFirestore();
+    const docRef = doc(db, "rounds", roundId);
+
+    onSnapshot(docRef, (doc) => {
+      const result = doc.data() as RoundState;
+
+      const needRandTime =
+        (result.stage === "prophet" && !result.prophets.length) ||
+        (result.stage === "witch" && !result.witches.length);
+
+      if (needRandTime) {
+        let nextStage = "";
+        if (result.stage === "witch") nextStage = "prophet";
+        if (result.stage === "prophet") nextStage = "vote";
+
+        const randMilli = (15 + 5 * Math.random()) * 1000;
+        setTimeout(() => {
+          setDoc(docRef, { stage: nextStage }, { merge: true });
+        }, randMilli);
+      }
     });
   }, [setState, roundId]);
 
