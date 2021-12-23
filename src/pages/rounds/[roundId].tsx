@@ -67,7 +67,9 @@ const Round: NextPage<RoundProps> = (props) => {
           },
         ]}
       >
-        {tab === "home" && <Home stage={round.stage} winners={round.winners} />}
+        {tab === "home" && (
+          <Home roundId={roundId} stage={round.stage} winners={round.winners} />
+        )}
         {tab === "power" && <Vote alives={round.alives} />}
         {tab === "character" && <Character type={type} />}
         {tab === "alives" && <Alives alives={round.alives} />}

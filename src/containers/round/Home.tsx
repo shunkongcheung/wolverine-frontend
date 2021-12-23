@@ -1,7 +1,9 @@
+import { doc, getFirestore, setDoc } from "firebase/firestore";
 import React, { memo, useCallback, useMemo } from "react";
 import styled from "styled-components";
 
 import { Button, Header } from "../../components";
+import { getFirebaseApp } from "../../utils";
 
 type Stage =
   | "lobby"
@@ -15,6 +17,7 @@ type Stage =
 type Winners = "farmer" | "wolf" | "";
 
 interface HomeProps {
+  roundId: string;
   winners: Winners;
   stage: Stage;
 }
@@ -39,10 +42,6 @@ const Content = styled.div`
   align-items: center;
 `;
 
-const StageTxt = styled.h2`
-  color: ${({ theme }) => theme.colors.primary[500]};
-`;
-
 const WinnersName = styled.h3`
   color: ${({ theme }) => theme.colors.primary[600]};
 `;
@@ -56,7 +55,7 @@ const WinnersDisplay = styled.div<{ url: string }>`
   background-position: center;
 `;
 
-const Home: React.FC<HomeProps> = ({ stage, winners }) => {
+const Home: React.FC<HomeProps> = ({ roundId, stage, winners }) => {
   const stageTxt = useMemo(() => {
     switch (stage) {
       case "lobby":
@@ -82,15 +81,28 @@ const Home: React.FC<HomeProps> = ({ stage, winners }) => {
     return "遊戲進行中";
   }, [winners]);
 
-  const handleBegin = useCallback(() => {}, []);
+  const handleBegin = useCallback(() => {
+    getFirebaseApp();
+    const db = getFirestore();
+    // begin the game
+    setDoc(
+      doc(db, "rounds", roundId),
+      {
+        stage: "wolf", // move to wolf
+        votes: [],
+        isPoisoned: false,
+        isHealed: false,
+      },
+      { merge: true }
+    );
+  }, [roundId]);
 
   return (
     <Container>
-      <Header>主頁</Header>
+      <Header>{stageTxt}</Header>
       <Content>
         <WinnersDisplay url={`/${winners || "question-mark"}.png`} />
         <WinnersName>{winnersName}</WinnersName>
-        <StageTxt>{stageTxt}</StageTxt>
         {stage === "lobby" && (
           <BtnContainer>
             <Button handleClick={handleBegin}>開始</Button>
