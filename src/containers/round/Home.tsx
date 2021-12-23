@@ -1,9 +1,8 @@
-import { doc, getFirestore, setDoc } from "firebase/firestore";
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useMemo } from "react";
 import styled from "styled-components";
 
-import { Button, Header } from "../../components";
-import { getFirebaseApp } from "../../utils";
+import { Header } from "../../components";
+import Lobby from "./Lobby";
 
 type Stage =
   | "lobby"
@@ -16,15 +15,15 @@ type Stage =
 
 type Winners = "farmer" | "wolf" | "";
 
+type Role = "farmer" | "wolf" | "prophet" | "witch" | "wolf-king";
+
 interface HomeProps {
+  alives: Array<string>;
+  role: Role;
   roundId: string;
   winners: Winners;
   stage: Stage;
 }
-
-const BtnContainer = styled.div`
-  width: 400px;
-`;
 
 const Container = styled.div`
   width: 100%;
@@ -34,28 +33,13 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const Content = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-`;
-
-const WinnersName = styled.h3`
-  color: ${({ theme }) => theme.colors.primary[600]};
-`;
-
-const WinnersDisplay = styled.div<{ url: string }>`
-  width: 200px;
-  height: 200px;
-  background: url(${({ url }) => url});
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-`;
-
-const Home: React.FC<HomeProps> = ({ roundId, stage, winners }) => {
+const Home: React.FC<HomeProps> = ({
+  alives,
+  role,
+  roundId,
+  stage,
+  winners,
+}) => {
   const stageTxt = useMemo(() => {
     switch (stage) {
       case "lobby":
@@ -75,40 +59,21 @@ const Home: React.FC<HomeProps> = ({ roundId, stage, winners }) => {
     }
   }, [stage]);
 
-  const winnersName = useMemo(() => {
-    if (winners === "wolf") return "狼人勝";
-    if (winners === "farmer") return "農民勝";
-    return "遊戲進行中";
-  }, [winners]);
-
-  const handleBegin = useCallback(() => {
-    getFirebaseApp();
-    const db = getFirestore();
-    // begin the game
-    setDoc(
-      doc(db, "rounds", roundId),
-      {
-        stage: "wolf", // move to wolf
-        votes: [],
-        isPoisoned: false,
-        isHealed: false,
-      },
-      { merge: true }
-    );
-  }, [roundId]);
+  const isWolf = role === "wolf" || role === "wolf-king";
+  const isProphet = role === "prophet";
+  const isWitch = role === "witch";
 
   return (
     <Container>
       <Header>{stageTxt}</Header>
-      <Content>
-        <WinnersDisplay url={`/${winners || "question-mark"}.png`} />
-        <WinnersName>{winnersName}</WinnersName>
-        {stage === "lobby" && (
-          <BtnContainer>
-            <Button handleClick={handleBegin}>開始</Button>
-          </BtnContainer>
-        )}
-      </Content>
+      {stage === "lobby" && (
+        <Lobby isWaitingForBegin winners={winners} roundId={roundId} />
+      )}
+      {stage === "wolf" && isWolf && <WolfKill alives={alives} />}
+      {stage === "wolf" && !isWolf && (
+        <Lobby winners={winners} roundId={roundId} />
+      )}
+      {stage === "finish" && <Lobby winners={winners} roundId={roundId} />}
     </Container>
   );
 };
