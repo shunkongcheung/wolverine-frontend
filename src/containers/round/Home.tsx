@@ -1,27 +1,40 @@
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useMemo } from "react";
 import styled from "styled-components";
 
-import { Button, Header } from "../../components";
+import { Header } from "../../components";
+import Discuss from "./Discuss";
+import Lobby from "./Lobby";
+import Prophet from "./Prophet";
+import Witch from "./Witch";
+import WolfKill from "./WolfKill";
+import Vote from "./Vote";
 
 type Stage =
   | "lobby"
   | "wolf"
   | "prophet"
   | "witch"
-  | "discuss"
   | "vote"
+  | "discuss"
   | "finish";
 
 type Winners = "farmer" | "wolf" | "";
 
+type Role = "farmer" | "wolf" | "prophet" | "witch" | "wolf-king";
+
 interface HomeProps {
+  alives: Array<string>;
+  isHealed: boolean;
+  isPoisoned: boolean;
+  killing: string;
+  poisoning: string;
+  role: Role;
+  roundId: string;
+  votes: Array<string>;
   winners: Winners;
+  wolfs: Array<string>;
   stage: Stage;
 }
-
-const BtnContainer = styled.div`
-  width: 400px;
-`;
 
 const Container = styled.div`
   width: 100%;
@@ -31,32 +44,19 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const Content = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-`;
-
-const StageTxt = styled.h2`
-  color: ${({ theme }) => theme.colors.primary[500]};
-`;
-
-const WinnersName = styled.h3`
-  color: ${({ theme }) => theme.colors.primary[600]};
-`;
-
-const WinnersDisplay = styled.div<{ url: string }>`
-  width: 200px;
-  height: 200px;
-  background: url(${({ url }) => url});
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-`;
-
-const Home: React.FC<HomeProps> = ({ stage, winners }) => {
+const Home: React.FC<HomeProps> = ({
+  alives,
+  isHealed,
+  isPoisoned,
+  killing,
+  poisoning,
+  role,
+  roundId,
+  stage,
+  votes,
+  winners,
+  wolfs,
+}) => {
   const stageTxt = useMemo(() => {
     switch (stage) {
       case "lobby":
@@ -76,27 +76,57 @@ const Home: React.FC<HomeProps> = ({ stage, winners }) => {
     }
   }, [stage]);
 
-  const winnersName = useMemo(() => {
-    if (winners === "wolf") return "狼人勝";
-    if (winners === "farmer") return "農民勝";
-    return "遊戲進行中";
-  }, [winners]);
+  const isWolf = role === "wolf" || role === "wolf-king";
+  const isProphet = role === "prophet";
+  const isWitch = role === "witch";
 
-  const handleBegin = useCallback(() => {}, []);
-
+  const isCurrRole =
+    (stage === "wolf" && isWolf) ||
+    (stage === "witch" && isWitch) ||
+    (stage === "prophet" && isProphet) ||
+    stage === "vote" ||
+    stage === "discuss" ||
+    stage === "lobby" ||
+    stage === "finish";
   return (
     <Container>
-      <Header>主頁</Header>
-      <Content>
-        <WinnersDisplay url={`/${winners || "question-mark"}.png`} />
-        <WinnersName>{winnersName}</WinnersName>
-        <StageTxt>{stageTxt}</StageTxt>
-        {stage === "lobby" && (
-          <BtnContainer>
-            <Button handleClick={handleBegin}>開始</Button>
-          </BtnContainer>
-        )}
-      </Content>
+      <Header>{stageTxt}</Header>
+      {stage === "lobby" && (
+        <Lobby isWaitingForBegin winners={winners} roundId={roundId} />
+      )}
+      {stage === "finish" && <Lobby winners={winners} roundId={roundId} />}
+      {!isCurrRole && <Lobby winners={winners} roundId={roundId} />}
+      {stage === "wolf" && isCurrRole && (
+        <WolfKill alives={alives} roundId={roundId} />
+      )}
+      {stage === "witch" && isCurrRole && (
+        <Witch
+          alives={alives}
+          isHealed={isHealed}
+          isPoisoned={isPoisoned}
+          killing={killing}
+          roundId={roundId}
+        />
+      )}
+      {stage === "prophet" && isCurrRole && (
+        <Prophet
+          alives={alives}
+          killing={killing}
+          poisoning={poisoning}
+          wolfs={wolfs}
+          roundId={roundId}
+        />
+      )}
+      {stage === "vote" && (
+        <Vote
+          alives={alives}
+          killing={killing}
+          poisoning={poisoning}
+          roundId={roundId}
+          votes={votes}
+        />
+      )}
+      {stage === "discuss" && <Discuss roundId={roundId} votes={votes} />}
     </Container>
   );
 };
