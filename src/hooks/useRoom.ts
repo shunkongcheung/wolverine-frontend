@@ -1,4 +1,5 @@
 import { doc, getFirestore, onSnapshot } from "firebase/firestore";
+import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { getFirebaseApp } from "../utils";
 
@@ -28,6 +29,8 @@ function useRoom(roomId: string) {
     wolfKing: -1,
   });
 
+  const router = useRouter();
+
   const total = useMemo(() => {
     const prophetCount = 1;
     return (
@@ -41,6 +44,8 @@ function useRoom(roomId: string) {
     onSnapshot(doc(db, "rooms", roomId), (doc) => {
       const result = doc.data() as RoomState;
       setState(result);
+
+      if (result.currentRound) router.push(`/rounds/${result.currentRound}`);
     });
   }, [setState, roomId]);
 
