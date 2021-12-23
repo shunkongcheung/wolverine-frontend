@@ -16,7 +16,7 @@ interface RoundState {
   // meta information
   roomId: string;
   stage: Stage;
-  winners: string;
+  winner: string;
 
   // roles
   farmers: Array<string>;
@@ -29,8 +29,18 @@ interface RoundState {
   alives: Array<string>;
 }
 
-function useRound(roundId: string, initialValues: RoundState) {
-  const [state, setState] = useState<RoundState>(initialValues);
+function useRound(roundId: string) {
+  const [state, setState] = useState<RoundState>({
+    roomId: "",
+    stage: "lobby",
+    winner: "",
+    farmers: [],
+    prophets: [],
+    witches: [],
+    wolfKings: [],
+    wolfs: [],
+    alives: [],
+  });
 
   useEffect(() => {
     getFirebaseApp();

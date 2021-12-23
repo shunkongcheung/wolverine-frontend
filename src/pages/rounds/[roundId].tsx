@@ -1,6 +1,6 @@
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import type { GetServerSidePropsContext, NextPage } from "next";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { AiOutlineHome } from "react-icons/ai";
 import { FaVoteYea } from "react-icons/fa";
 import { GiCrossedSwords } from "react-icons/gi";
@@ -9,34 +9,10 @@ import styled from "styled-components";
 
 import { TabContainer } from "../../components";
 import { Character } from "../../containers/round";
-import { useRound } from "../../hooks";
-import { getFirebaseApp } from "../../utils";
-
-type Stage =
-  | "lobby"
-  | "wolf"
-  | "prophet"
-  | "witch"
-  | "discuss"
-  | "vote"
-  | "finish";
+import { useAuthed, useRound } from "../../hooks";
 
 interface RoundProps {
   roundId: string;
-
-  // meta information
-  roomId: string;
-  stage: Stage;
-  winners: string;
-
-  // roles
-  farmers: Array<string>;
-  prophets: Array<string>;
-  witches: Array<string>;
-  wolfKings: Array<string>;
-  wolfs: Array<string>;
-
-  alives: Array<string>;
 }
 
 const Container = styled.div`
@@ -45,12 +21,28 @@ const Container = styled.div`
 `;
 
 const Round: NextPage<RoundProps> = (props) => {
-  const { roundId, ...initialValues } = props;
+  const { roundId } = props;
 
   const [tab, setTab] = useState("home");
-  const round = useRound(roundId, initialValues);
+  const round = useRound(roundId);
 
-  console.log(round);
+  const username = useAuthed();
+
+  const type = useMemo(() => {
+    const isWolf = round.wolfs.find((name) => name === username);
+    if (isWolf) return "wolf";
+
+    const isWolfKing = round.wolfKings.find((name) => name === username);
+    if (isWolfKing) return "wolf-king";
+
+    const isWitch = round.witches.find((name) => name === username);
+    if (isWitch) return "witch";
+
+    const isProphet = round.prophets.find((name) => name === username);
+    if (isProphet) return "prophet";
+
+    return "farmer";
+  }, [username, round]);
 
   return (
     <Container>
@@ -77,9 +69,9 @@ const Round: NextPage<RoundProps> = (props) => {
           },
         ]}
       >
-        {tab === "home" && <Character type="wolf" />}
+        {tab === "home" && <Home stage="wolf" />}
         {tab === "power" && <Character type="wolf" />}
-        {tab === "character" && <Character type="wolf" />}
+        {tab === "character" && <Character type={type} />}
         {tab === "vote" && <Character type="wolf" />}
       </TabContainer>
     </Container>
@@ -87,18 +79,8 @@ const Round: NextPage<RoundProps> = (props) => {
 };
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  // fetch initial data
   const roundId = (ctx as any).params.roundId;
-  getFirebaseApp();
-  const db = getFirestore();
-  const docRef = await getDoc(doc(db, "rounds", roundId));
-
-  if (!docRef.exists()) {
-    return { notFound: true };
-  } else {
-    const { timestamp, ...result } = docRef.data();
-    return { props: { ...result, roundId } };
-  }
+  return { props: { roundId } };
 };
 
 export default Round;
