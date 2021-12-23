@@ -66,12 +66,12 @@ const Prophet: React.FC<ProphetProps> = ({
       doc(db, "rounds", roundId),
       {
         stage: "vote",
-        alives: arrayRemove(killed),
-        farmers: arrayRemove(killed),
-        prophets: arrayRemove(killed),
-        witches: arrayRemove(killed),
-        wolfs: arrayRemove(killed),
-        wolfKings: arrayRemove(killed),
+        alives: arrayRemove(...killed),
+        farmers: arrayRemove(...killed),
+        prophets: arrayRemove(...killed),
+        witches: arrayRemove(...killed),
+        wolfs: arrayRemove(...killed),
+        wolfKings: arrayRemove(...killed),
       },
       { merge: true }
     );
