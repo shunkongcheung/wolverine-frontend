@@ -6,14 +6,15 @@ import Lobby from "./Lobby";
 import Prophet from "./Prophet";
 import Witch from "./Witch";
 import WolfKill from "./WolfKill";
+import Vote from "./Vote";
 
 type Stage =
   | "lobby"
   | "wolf"
   | "prophet"
   | "witch"
-  | "discuss"
   | "vote"
+  | "discuss"
   | "finish";
 
 type Winners = "farmer" | "wolf" | "";
@@ -28,6 +29,7 @@ interface HomeProps {
   poisoning: string;
   role: Role;
   roundId: string;
+  votes: Array<string>;
   winners: Winners;
   wolfs: Array<string>;
   stage: Stage;
@@ -50,6 +52,7 @@ const Home: React.FC<HomeProps> = ({
   role,
   roundId,
   stage,
+  votes,
   winners,
   wolfs,
 }) => {
@@ -79,8 +82,8 @@ const Home: React.FC<HomeProps> = ({
   const isCurrRole =
     (stage === "wolf" && isWolf) ||
     (stage === "witch" && isWitch) ||
-    (stage === "prophet" && isProphet);
-
+    (stage === "prophet" && isProphet) ||
+    stage === "vote";
   return (
     <Container>
       <Header>{stageTxt}</Header>
@@ -108,6 +111,15 @@ const Home: React.FC<HomeProps> = ({
           poisoning={poisoning}
           wolfs={wolfs}
           roundId={roundId}
+        />
+      )}
+      {stage === "vote" && (
+        <Vote
+          alives={alives}
+          killing={killing}
+          poisoning={poisoning}
+          roundId={roundId}
+          votes={votes}
         />
       )}
     </Container>
