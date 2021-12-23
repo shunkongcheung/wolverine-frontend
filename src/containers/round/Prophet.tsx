@@ -1,4 +1,4 @@
-import { doc, getFirestore, setDoc } from "firebase/firestore";
+import { arrayRemove, doc, getFirestore, setDoc } from "firebase/firestore";
 import React, { memo, useCallback, useMemo, useState } from "react";
 import styled from "styled-components";
 
@@ -51,15 +51,12 @@ const Prophet: React.FC<ProphetProps> = ({
   alives,
   killing,
   poisoning,
-  wolfs,
   roundId,
+  wolfs,
 }) => {
   const [selected, setSelected] = useState("");
 
-  const remains = useMemo(
-    () => alives.filter((itm) => itm !== killing && itm !== poisoning),
-    [alives, killing, poisoning]
-  );
+  const killed = useMemo(() => [killing, poisoning], [killing, poisoning]);
 
   const handleFinish = useCallback(async () => {
     getFirebaseApp();
@@ -67,15 +64,24 @@ const Prophet: React.FC<ProphetProps> = ({
 
     await setDoc(
       doc(db, "rounds", roundId),
-      { stage: "vote", alives: remains },
+      {
+        stage: "vote",
+        alives: arrayRemove(killed),
+        farmers: arrayRemove(killed),
+        prophets: arrayRemove(killed),
+        witches: arrayRemove(killed),
+        wolfs: arrayRemove(killed),
+        wolfKings: arrayRemove(killed),
+      },
       { merge: true }
     );
-  }, [remains]);
+  }, [alives, killed]);
 
   const heading = useMemo(() => {
     if (!selected) return "你想調查誰";
 
     const isWolf = wolfs.find((itm) => itm === selected);
+
     return `${selected}${isWolf ? "" : "不"}是狼`;
   }, [selected, wolfs]);
 
