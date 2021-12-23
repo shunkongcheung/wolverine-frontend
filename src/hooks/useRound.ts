@@ -34,7 +34,7 @@ interface RoundState {
   votes: Array<string>;
   killing: string;
   isHealed: boolean;
-  isPoisioned: boolean;
+  isPoisoned: boolean;
 }
 
 function useRound(roundId: string) {
@@ -51,7 +51,7 @@ function useRound(roundId: string) {
     votes: [],
     killing: "",
     isHealed: false,
-    isPoisioned: false,
+    isPoisoned: false,
   });
 
   useEffect(() => {
