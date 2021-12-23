@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { Header } from "../../components";
 import Lobby from "./Lobby";
+import Prophet from "./Prophet";
 import Witch from "./Witch";
 import WolfKill from "./WolfKill";
 
@@ -28,6 +29,7 @@ interface HomeProps {
   role: Role;
   roundId: string;
   winners: Winners;
+  wolfs: Array<string>;
   stage: Stage;
 }
 
@@ -44,10 +46,12 @@ const Home: React.FC<HomeProps> = ({
   isHealed,
   isPoisoned,
   killing,
+  poisoning,
   role,
   roundId,
   stage,
   winners,
+  wolfs,
 }) => {
   const stageTxt = useMemo(() => {
     switch (stage) {
@@ -94,6 +98,15 @@ const Home: React.FC<HomeProps> = ({
           isHealed={isHealed}
           isPoisoned={isPoisoned}
           killing={killing}
+          roundId={roundId}
+        />
+      )}
+      {stage === "prophet" && isCurrRole && (
+        <Prophet
+          alives={alives}
+          killing={killing}
+          poisoning={poisoning}
+          wolfs={wolfs}
           roundId={roundId}
         />
       )}
