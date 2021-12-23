@@ -2,6 +2,7 @@ import React, { memo, useMemo } from "react";
 import styled from "styled-components";
 
 import { Header } from "../../components";
+import Discuss from "./Discuss";
 import Lobby from "./Lobby";
 import Prophet from "./Prophet";
 import Witch from "./Witch";
@@ -83,7 +84,10 @@ const Home: React.FC<HomeProps> = ({
     (stage === "wolf" && isWolf) ||
     (stage === "witch" && isWitch) ||
     (stage === "prophet" && isProphet) ||
-    stage === "vote";
+    stage === "vote" ||
+    stage === "discuss" ||
+    stage === "lobby" ||
+    stage === "finish";
   return (
     <Container>
       <Header>{stageTxt}</Header>
@@ -122,6 +126,7 @@ const Home: React.FC<HomeProps> = ({
           votes={votes}
         />
       )}
+      {stage === "discuss" && <Discuss roundId={roundId} votes={votes} />}
     </Container>
   );
 };
