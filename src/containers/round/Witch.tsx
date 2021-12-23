@@ -91,7 +91,12 @@ const Witch: React.FC<WitchProps> = ({
       getFirebaseApp();
       const db = getFirestore();
       const values: any = { poisoning, stage: "prophet" };
-      if (isHealing) values.killing = "";
+      if (isHealing) {
+        values.killing = "";
+        values.isHealed = true;
+      }
+      if (!!poisoning) values.isPoisoned = true;
+
       await setDoc(doc(db, "rounds", roundId), values, { merge: true });
     },
   });
