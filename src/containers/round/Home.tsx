@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { Header } from "../../components";
 import Lobby from "./Lobby";
+import WolfKill from "./WolfKill";
 
 type Stage =
   | "lobby"
@@ -63,17 +64,25 @@ const Home: React.FC<HomeProps> = ({
   const isProphet = role === "prophet";
   const isWitch = role === "witch";
 
+  const isCurrRole =
+    (stage === "wolf" && isWolf) ||
+    (stage === "witch" && isWitch) ||
+    (stage === "prophet" && isProphet);
+
   return (
     <Container>
       <Header>{stageTxt}</Header>
       {stage === "lobby" && (
         <Lobby isWaitingForBegin winners={winners} roundId={roundId} />
       )}
-      {stage === "wolf" && isWolf && <WolfKill alives={alives} />}
-      {stage === "wolf" && !isWolf && (
-        <Lobby winners={winners} roundId={roundId} />
-      )}
       {stage === "finish" && <Lobby winners={winners} roundId={roundId} />}
+      {!isCurrRole && <Lobby winners={winners} roundId={roundId} />}
+      {stage === "wolf" && isCurrRole && (
+        <WolfKill alives={alives} roundId={roundId} />
+      )}
+      {stage === "witch" && isCurrRole && (
+        <Witch alives={alives} roundId={roundId} />
+      )}
     </Container>
   );
 };
