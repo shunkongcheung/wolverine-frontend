@@ -1,10 +1,4 @@
-import {
-  arrayUnion,
-  doc,
-  getDoc,
-  getFirestore,
-  updateDoc,
-} from "firebase/firestore";
+import { arrayUnion, doc, getFirestore, updateDoc } from "firebase/firestore";
 import type { GetServerSidePropsContext, NextPage } from "next";
 import { FaBars } from "react-icons/fa";
 import { BsPeople } from "react-icons/bs";
