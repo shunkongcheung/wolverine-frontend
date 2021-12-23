@@ -17,8 +17,16 @@ interface RoomState {
   wolfKing: number;
 }
 
-function useRoom(roomId: string, initialValues: RoomState) {
-  const [state, setState] = useState<RoomState>(initialValues);
+function useRoom(roomId: string) {
+  const [state, setState] = useState<RoomState>({
+    createdBy: "",
+    currentRound: "",
+    joined: [],
+    farmer: -1,
+    witch: -1,
+    wolf: -1,
+    wolfKing: -1,
+  });
 
   const total = useMemo(() => {
     const prophetCount = 1;
