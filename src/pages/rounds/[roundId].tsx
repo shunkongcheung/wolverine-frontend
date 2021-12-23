@@ -7,7 +7,7 @@ import { RiCharacterRecognitionLine } from "react-icons/ri";
 import styled from "styled-components";
 
 import { TabContainer } from "../../components";
-import { Character, Home } from "../../containers/round";
+import { Character, Home, Vote } from "../../containers/round";
 import { useAuthed, useRound } from "../../hooks";
 
 interface RoundProps {
@@ -71,7 +71,7 @@ const Round: NextPage<RoundProps> = (props) => {
         {tab === "home" && <Home stage={round.stage} winners={round.winners} />}
         {tab === "power" && <Character type="wolf" />}
         {tab === "character" && <Character type={type} />}
-        {tab === "vote" && <Character type="wolf" />}
+        {tab === "vote" && <Vote alives={round.alives} />}
       </TabContainer>
     </Container>
   );
