@@ -29,6 +29,12 @@ interface RoundState {
 
   // aliving people
   alives: Array<string>;
+
+  // gaming information
+  votes: Array<string>;
+  killing: string;
+  isHealed: boolean;
+  isPoisioned: boolean;
 }
 
 function useRound(roundId: string) {
@@ -42,6 +48,10 @@ function useRound(roundId: string) {
     wolfKings: [],
     wolfs: [],
     alives: [],
+    votes: [],
+    killing: "",
+    isHealed: false,
+    isPoisioned: false,
   });
 
   useEffect(() => {
