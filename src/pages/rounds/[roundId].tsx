@@ -1,4 +1,3 @@
-import { doc, getDoc, getFirestore } from "firebase/firestore";
 import type { GetServerSidePropsContext, NextPage } from "next";
 import { useMemo, useState } from "react";
 import { AiOutlineHome } from "react-icons/ai";
@@ -8,7 +7,7 @@ import { RiCharacterRecognitionLine } from "react-icons/ri";
 import styled from "styled-components";
 
 import { TabContainer } from "../../components";
-import { Character } from "../../containers/round";
+import { Character, Home } from "../../containers/round";
 import { useAuthed, useRound } from "../../hooks";
 
 interface RoundProps {
@@ -69,7 +68,7 @@ const Round: NextPage<RoundProps> = (props) => {
           },
         ]}
       >
-        {tab === "home" && <Home stage="wolf" />}
+        {tab === "home" && <Home stage={round.stage} winners={round.winners} />}
         {tab === "power" && <Character type="wolf" />}
         {tab === "character" && <Character type={type} />}
         {tab === "vote" && <Character type="wolf" />}
