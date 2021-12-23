@@ -1,10 +1,4 @@
-import {
-  arrayUnion,
-  doc,
-  getDoc,
-  getFirestore,
-  updateDoc,
-} from "firebase/firestore";
+import { arrayUnion, doc, getFirestore, updateDoc } from "firebase/firestore";
 import type { GetServerSidePropsContext, NextPage } from "next";
 import { FaBars } from "react-icons/fa";
 import { BsPeople } from "react-icons/bs";
@@ -18,21 +12,6 @@ import { useEffect, useState } from "react";
 
 interface RoomProps {
   roomId: string;
-
-  // role count
-  farmer: number;
-  witch: number;
-  wolf: number;
-  wolfKing: number;
-
-  // user's username who joined the room
-  joined: Array<string>;
-
-  // indicate a round started
-  currentRound: string;
-
-  // meta information
-  createdBy: string;
 }
 
 type Tab = "joined" | "control";
@@ -43,8 +22,8 @@ const Container = styled.div`
 `;
 
 const Room: NextPage<RoomProps> = (props) => {
-  const { roomId, ...initialValues } = props;
-  const room = useRoom(roomId, initialValues);
+  const { roomId } = props;
+  const room = useRoom(roomId);
   const [tab, setTab] = useState<Tab>("control");
 
   // get username
@@ -91,16 +70,7 @@ const Room: NextPage<RoomProps> = (props) => {
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   // fetch initial data
   const roomId = (ctx as any).params.roomId;
-  getFirebaseApp();
-  const db = getFirestore();
-  const docRef = await getDoc(doc(db, "rooms", roomId));
-
-  if (!docRef.exists()) {
-    return { notFound: true };
-  } else {
-    const result = docRef.data();
-    return { props: { ...result, roomId } };
-  }
+  return { props: { roomId } };
 };
 
 export default Room;

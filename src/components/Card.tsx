@@ -10,7 +10,7 @@ const Container = styled.div`
   width: 500px;
   height: 700px;
   max-width: 70%;
-  max-height: 60vh;
+  max-height: 80vh;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
 
