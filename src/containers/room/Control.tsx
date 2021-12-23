@@ -94,6 +94,7 @@ const Control: React.FC<ControlProps> = ({
       alives: joined,
       votes: [],
       killing: "",
+      poisoning: "",
       isHealed: false,
       isPoisoned: false,
     };
