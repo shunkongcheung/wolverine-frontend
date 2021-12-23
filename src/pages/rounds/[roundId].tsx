@@ -1,13 +1,13 @@
 import type { GetServerSidePropsContext, NextPage } from "next";
 import { useMemo, useState } from "react";
 import { AiOutlineHome } from "react-icons/ai";
-import { FaVoteYea } from "react-icons/fa";
+import { BsPeople } from "react-icons/bs";
 import { GiCrossedSwords } from "react-icons/gi";
 import { RiCharacterRecognitionLine } from "react-icons/ri";
 import styled from "styled-components";
 
 import { TabContainer } from "../../components";
-import { Character, Home, Vote } from "../../containers/round";
+import { Alives, Character, Home, Vote } from "../../containers/round";
 import { useAuthed, useRound } from "../../hooks";
 
 interface RoundProps {
@@ -62,16 +62,15 @@ const Round: NextPage<RoundProps> = (props) => {
             icon: <RiCharacterRecognitionLine size={30} />,
           },
           {
-            id: "vote",
-            icon: <FaVoteYea size={30} />,
-            disabled: round.stage !== "vote",
+            id: "alives",
+            icon: <BsPeople size={30} />,
           },
         ]}
       >
         {tab === "home" && <Home stage={round.stage} winners={round.winners} />}
-        {tab === "power" && <Character type="wolf" />}
+        {tab === "power" && <Vote alives={round.alives} />}
         {tab === "character" && <Character type={type} />}
-        {tab === "vote" && <Vote alives={round.alives} />}
+        {tab === "alives" && <Alives alives={round.alives} />}
       </TabContainer>
     </Container>
   );
